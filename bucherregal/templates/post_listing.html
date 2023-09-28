@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block HTML_CONTENTS %}
+<div class="container">
+    <div class="row">
+    {% for BOOK_LISTING in BOOK_LISTINGS %}
+        <div class="col-4 col-sm-4 col-md-4 col-lg-3 col-xl-2 col-xxl-2 mb-3">
+            <div class="card">
+                {% if BOOK_LISTING.cover_image_url %}
+                    <img src="{{ BOOK_LISTING.cover_image_url }}" alt="{{ BOOK_LISTING.title }}" class="card-img-top" />
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a class="stretched-link" href='{{ url_for("bookshelf.post_view", post_id=BOOK_LISTING.post_id) }}'>{{ BOOK_LISTING.title }}</a>
+                    </h3>
+                    <div class="card-subtitle">
+                        By <a href='{{ url_for("bookshelf.index", author_id=BOOK_LISTING.user.id) }}'>
+                        {{ BOOK_LISTING.user.display_name }}</a>
+                    </div>
+                    <div class="card-text">
+                        {{ BOOK_LISTING.location }}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    {{ BOOK_LISTING.timestamp_str }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

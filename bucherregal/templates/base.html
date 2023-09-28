@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+    <head>
+        {% block HEAD %}
+            <title>{{ WEBSITE_CONTEXT['title'] }}</title>
+        {% endblock %}
+        <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='bootstrap.darkblue.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='codehilite-dark.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='codehilite-light.css') }}" rel="stylesheet">
+
+        <script defer src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+        <meta name=viewport content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <nav class='navbar navbar-expand-sm navbar-dark bg-dark mb-4'>
+            <div class="container">
+                <a href="{{ url_for("bookshelf.index") }}" class="navbar-brand">{{ WEBSITE_CONTEXT['title'] }}</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-menu">
+                    <span class="span navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="nav-menu">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a href="{{ url_for("bookshelf.index") }}" class="nav-link">home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for("bookshelf.rss") }}" class="nav-link">rss</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for("bookshelf.search_form") }}" class="nav-link">search</a>
+                        </li>
+                        {% if USER_CONTEXT %}
+                            <li class="nav-item">
+                                <a href="{{ url_for("bookshelf.post_maker_form") }}" class="nav-link">post</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for("user_management.my_profile") }}" class="nav-link">profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url_for("user_management.account_settings") }}" class="nav-link">account</a>
+                            </li>
+                            {% if USER_CONTEXT.permissions >= 9 %}
+                                <li class="nav-item">
+                                    <a href="{{ url_for("administration.admin") }}" class="nav-link">admin</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a href="{{ url_for("user_management.logout") }}" class="nav-link">logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a href="{{ url_for("user_management.login_form") }}" class="nav-link">login</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <section>
+            {% block NOTICE_BLOCK %}
+                {% if NOTICE_MESSAGE %}
+                    <div class="container">
+                        <div class='alert {{ ALERT_TYPE }}'>
+                            {{ NOTICE_MESSAGE }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endblock %}
+        </section>
+        <section>
+            {% block HTML_CONTENTS %}&nbsp;{% endblock %}
+        </section>
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="container">
+                <div class="d-flex align-items-center">
+                    <span class="mb-3 mb-md-0 text-muted">
+                        {% block FOOTER_CONTENTS %}
+                            {% if USER_CONTEXT %}
+                                logged in as: {{ USER_CONTEXT.display_name }}
+                            {% else %}
+                                powered by <a href="https://github.com/Kyuunex/bucherregal">bucherregal</a>.
+                                please consider leaving a star on github.
+                            {% endif %}
+                        {% endblock %}
+                    </span>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

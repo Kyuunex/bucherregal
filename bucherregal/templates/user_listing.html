@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block HTML_CONTENTS %}
+<div class="container">
+    <div class="row">
+    {% for USER in USER_LISTING %}
+        <div class="col-4 col-sm-4 col-md-4 col-lg-3 col-xl-2 col-xxl-2 mb-3">
+            <div class="card">
+                <img class="card-img-top" src="{{ url_for('static', filename='default_pp.png') }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ USER.display_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ USER.username }}</h6>
+                    <div class="card-text">permissions: {{ USER.permissions }}</div>
+                    <div class="card-text">{{ USER.email }}</div>
+                    <a href="{{ url_for("bookshelf.index", user_id=USER.id) }}" class="btn btn-primary mt-2">view posts</a>
+                    <a href="{{ url_for("user_management.profile", user_id=USER.id) }}" class="btn btn-primary mt-2">view profile</a>
+                    <!--a href="#" class="btn btn-danger mt-2">ban</a-->
+                </div>
+                <div class="card-footer">
+                    REG: {{ USER.registration_timestamp_str}}<br>
+                    UUID: {{ USER.id }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}

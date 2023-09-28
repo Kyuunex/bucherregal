@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block HTML_CONTENTS %}
+<div class="container">
+    <form action="{{ url_for('bookshelf.make_post') }}" method="post" enctype="multipart/form-data">
+        <div class="form-floating my-1">
+            <input name="title" type="text" id="title" class="form-control" placeholder="Title" required />
+            <label for="title">Title</label>
+        </div>
+
+        <div class="form-floating my-1">
+            <input name="cover_image_url" type="text" id="cover_image_url" class="form-control" placeholder="Cover image URL" />
+            <label for="cover_image_url">Cover image URL</label>
+        </div>
+
+        <div class="input-group">
+            <div class="form-floating my-1">
+                <input name="author" type="text" id="author" class="form-control" placeholder="Author" required />
+                <label for="author">Author</label>
+            </div>
+
+            <div class="form-floating my-1">
+                <input name="year" type="text" id="year" class="form-control" placeholder="Year" required />
+                <label for="year">Year</label>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <div class="form-floating my-1">
+                <input name="genre" type="text" id="genre" class="form-control" placeholder="Genre" />
+                <label for="genre">Genre</label>
+            </div>
+            <div class="form-floating my-1">
+                <input name="tags" type="text" id="tags" class="form-control" placeholder="Tags" />
+                <label for="tags">Tags</label>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <div class="form-floating my-1">
+                <select class="form-select" name="wear_rating" id="wear_rating">
+                    <option value="1">As new</option>
+                    <option value="2" selected>Fine</option>
+                    <option value="3">Very good</option>
+                    <option value="4">Good</option>
+                    <option value="5">Fair</option>
+                    <option value="6">Poor</option>
+                    <option value="7">Ex-library</option>
+                    <option value="8">Book club</option>
+                    <option value="9">Binding copy</option>
+                </select>  
+                <label for="wear_rating">Condition</label>
+            </div>
+            <a href="https://en.wikipedia.org/wiki/List_of_used_book_conditions" target="_blank" class="input-group-text my-1">Explanation</a>
+        </div>
+
+        <div class="form-floating my-1">
+            <textarea name="location" type="text" id="location" class="form-control" placeholder="General Location" required></textarea>
+            <label for="location">General Location</label>
+        </div>
+
+        <div class="form-floating my-1">
+            <textarea rows="4" style="height:40%;" name="additional_information" type="text" id="additional_information" class="form-control" placeholder="Additional information" required></textarea>
+            <label for="additional_information">Additional information</label>
+        </div>
+
+        <div class="form-floating my-1">
+            <input type="submit" value="Post" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+{% endblock %}

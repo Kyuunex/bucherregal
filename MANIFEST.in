@@ -1,0 +1,3 @@
+recursive-include bucherregal static/*
+recursive-include bucherregal templates/*
+global-exclude *.pyc

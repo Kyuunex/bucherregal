@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block HEAD %}
+    <title>{{ BOOK_LISTING.title }} - {{ WEBSITE_CONTEXT['title'] }}</title>
+    <meta property="og:title" content="{{ BOOK_LISTING.title }}">
+    <meta property="og:type" content="article">
+    {% if BOOK_LISTING.cover_image_url %}
+        <meta property="og:image" content="{{ BOOK_LISTING.cover_image_url }}">
+    {% endif %}
+    <meta property="og:url" content="{{ url_for("bookshelf.post_view", post_id=BOOK_LISTING.post_id) }}">
+
+    <meta property="og:description" content="{{ BOOK_LISTING.title }}">
+    <meta property="og:site_name" content="{{ WEBSITE_CONTEXT['title'] }}">
+
+    <meta property="article:published_time" content="{{ BOOK_LISTING.timestamp_utc.isoformat() }}">
+    <meta property="article:modified_time" content="{{ BOOK_LISTING.last_edit_timestamp_utc.isoformat() }}">
+    <meta property="article:expiration_time" content="{{ BOOK_LISTING.expiration_time_utc.isoformat() }}">
+    <meta property="article:author" content="{{ BOOK_LISTING.author.display_name }}">
+    <meta property="article:section" content="{{ BOOK_LISTING.genre }}">
+    <meta property="article:tag" content="{{ BOOK_LISTING.tags }}">
+{% endblock %}
+
+{% block HTML_CONTENTS %}
+<div class="container">
+    <div class="book_book_title"><h2>{{ BOOK_LISTING.title }}</h2></div>
+
+    {% if BOOK_LISTING.cover_image_url %}
+        <img src="{{ BOOK_LISTING.cover_image_url }}" alt="{{ BOOK_LISTING.title }}" class="book_listing_cover_image"/>
+        <hr />
+    {% endif %}
+
+    <p class="book_listing_location">
+        Location: {{ BOOK_LISTING.location }}
+    </p>
+
+    <p class="book_listing_genre">
+        Genre: {{ BOOK_LISTING.genre }}
+    </p>
+
+    <p class="book_listing_contents">
+        {{ BOOK_LISTING.additional_information }}
+    </p>
+</div>
+<section class="bg-info bg-opacity-10 text-light py-2">
+    <div class="container">
+        <div class="mb-1">
+            <a href='{{ url_for("bookshelf.index", post_id=BOOK_LISTING.post_id) }}' class="btn btn-success">request</a>
+            {% if USER_PERMISSIONS >= 5 %}
+                <a href='{{ url_for("bookshelf.post_edit_form", post_id=BOOK_LISTING.post_id) }}' class="btn btn-primary">edit</a>
+                <a href='{{ url_for("bookshelf.delete_post", post_id=BOOK_LISTING.post_id) }}' class="btn btn-danger">delete</a>
+            {% endif %}
+        </div>
+        <p>
+            Posted by <a href='{{ url_for("bookshelf.index", author_id=BOOK_LISTING.author.id) }}'>
+            {{ BOOK_LISTING.author.display_name }}</a>
+            on {{ BOOK_LISTING.timestamp_str }}
+            {% if (BOOK_LISTING.timestamp) != (BOOK_LISTING.last_edit_timestamp) %}
+                <br>Last edited on: {{ BOOK_LISTING.last_edit_timestamp_str }}
+            {% endif %}
+        </p>
+    </div>
+</section>
+
+{% endblock %}
