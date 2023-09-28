@@ -19,5 +19,5 @@ pip install -r requirements.txt
 ./test.py
 ```
 
-### [Installation Instructions](https://github.com/Kyuunex/bucherregal/blob/main/installation.md)
-### [Endpoint Documentation](https://github.com/Kyuunex/bucherregal/blob/main/documentation.md)
+### [Installation Instructions](https://github.com/Kyuunex/bucherregal/blob/master/installation.md)
+### [Endpoint Documentation](https://github.com/Kyuunex/bucherregal/blob/master/documentation.md)
