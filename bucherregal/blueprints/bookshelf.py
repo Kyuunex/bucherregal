@@ -27,9 +27,9 @@ bookshelf = Blueprint("bookshelf", __name__)
 @bookshelf.route('/rss.xml', methods=['GET', 'POST'], endpoint="rss")
 def index():
     """
-    This endpoint provides the index page, which is a listing of the recent bookshelf posts
+    This endpoint provides the index page, which is a listing of the recent book posts
 
-    :return: html render of the recent bookshelf posts
+    :return: html render of the recent book posts
     """
 
     user_context = get_user_context()
@@ -155,9 +155,9 @@ def index():
 @bookshelf.route('/post_maker_form')
 def post_maker_form():
     """
-    This endpoint provides a blog post form to a user, to be filled up and submitted
+    This endpoint provides a book post form to a user, to be filled up and submitted
 
-    :return: html render of a blog post form
+    :return: html render of a book post form
     """
 
     user_context = get_user_context()
@@ -175,7 +175,7 @@ def make_post():
     This endpoint handles the POST data submitted through post_maker_form.
     It will process user input and properly insert it into the database.
 
-    :return: a redirect to an endpoint used to view the newly made post
+    :return: a redirect to an endpoint used to view the newly made book post
     """
 
     user_context = get_user_context()
@@ -212,10 +212,10 @@ def make_post():
 @bookshelf.route('/post_view/<post_id>')
 def post_view(post_id):
     """
-    This endpoint reads the database and renders an html page containing the specified blog post.
+    This endpoint reads the database and renders a html page containing the specified book post.
 
-    :param post_id: ID of the blog post
-    :return: An html page render containing the blog post
+    :param post_id: ID of the book post
+    :return: An html page render containing the book post
     """
 
     user_context = get_user_context()
@@ -263,7 +263,7 @@ def post_edit_form(post_id):
     if not user_context.permissions >= 5:
         return "you do not have permissions to perform this action"
     user_permissions = user_context.permissions
-    ## TODO ONLY ORIGINAL POSTER CAN EDIT
+    # TODO: ONLY ORIGINAL POSTER CAN EDIT
 
     post_db_lookup = tuple(db_cursor.execute("SELECT id, user_id, title, timestamp, wear_rating, year, location, "
                                              "additional_information, author, last_edit_timestamp, genre, tags, "
@@ -290,7 +290,7 @@ def delete_post(post_id):
         return redirect(url_for("user_management.login_form"))
     if not user_context.permissions >= 5:
         return "you do not have permissions to perform this action"
-    ## TODO ONLY ORIGINAL POSTER CAN DELET
+    # TODO: ONLY ORIGINAL POSTER CAN DELETE
 
     db_cursor.execute("DELETE FROM book_listings WHERE id = ?", [post_id])
 
@@ -300,10 +300,10 @@ def delete_post(post_id):
 @bookshelf.route('/edit_post/<post_id>', methods=['POST'])
 def edit_post(post_id):
     """
-    This endpoint handles the POST data submitted through post_maker_form.
-    It will process user input and properly insert it into the database.
+    This endpoint handles the POST data submitted through post_edit_form.
+    It will process user input and properly update everything in the database.
 
-    :return: a redirect to an endpoint used to view the newly made post
+    :return: a redirect to an endpoint used to view the newly made book post
     """
 
     user_context = get_user_context()
@@ -311,7 +311,7 @@ def edit_post(post_id):
         return redirect(url_for("user_management.login_form"))
     if not user_context.permissions >= 5:
         return "you do not have permissions to perform this action"
-    ## TODO ONLY ORIGINAL POSTER CAN EDIT
+    # TODO: ONLY ORIGINAL POSTER CAN EDIT
 
     if request.method == 'POST':
         title = request.form['title']
