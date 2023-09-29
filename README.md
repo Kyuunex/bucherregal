@@ -10,6 +10,7 @@ and supporting resources like book authors, genres, condition, and more.
 - list to be expanded
 
 # Quick Installation for testing, debugging and evaluation
+Note: on Windows, use Git Bash, on Linux, use your usual terminal.
 ```bash
 git clone https://github.com/Kyuunex/bucherregal.git -b master
 cd bucherregal
@@ -19,5 +20,6 @@ pip install -r requirements.txt
 ./test.py
 ```
 
-### [Installation Instructions](https://github.com/Kyuunex/bucherregal/blob/master/installation.md)
+### [Installation Instructions for Production (Non-Docker)](https://github.com/Kyuunex/bucherregal/blob/master/installation.md)
+### [Installation Instructions for Production (Docker)](https://github.com/Kyuunex/bucherregal/blob/master/installation.md)
 ### [Endpoint Documentation](https://github.com/Kyuunex/bucherregal/blob/master/documentation.md)
