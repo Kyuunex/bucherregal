@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block HTML_CONTENTS %}
+    <div class="container">
+    {% for REQUEST in REQUEST_LISTING %}
+        <div class="card mb-2">
+            <h5 class="card-header">
+                {{ REQUEST.user.display_name }}
+            </h5>
+            <div class="card-body">
+                <h6 class="card-subtitle">
+                    Requested on: {{ REQUEST.request_timestamp_str }}
+                </h6>
+                <p class="card-text">
+                    {{ REQUEST.comment }}
+                </p>
+            </div>
+            <div class="card-footer">
+                Member since: {{ REQUEST.user.registration_timestamp_str }}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

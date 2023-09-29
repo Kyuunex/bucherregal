@@ -16,6 +16,9 @@ from bucherregal.reusables.user_validation import get_user_context
 from bucherregal.classes.BookPost import *
 from bucherregal.classes.BookPostUser import *
 from bucherregal.classes.BookPostDeletedUser import *
+from bucherregal.classes.BookRequest import *
+from bucherregal.classes.User import *
+from bucherregal.classes.DeletedUser import *
 
 bookshelf = Blueprint("bookshelf", __name__)
 
@@ -392,3 +395,34 @@ def request_book(post_id):
     resp = make_response(redirect(url_for("bookshelf.post_view", post_id=post_id)))
 
     return resp
+
+
+@bookshelf.route('/book_request_listing/<post_id>')
+def book_request_listing(post_id):
+    user_context = get_user_context()
+    if not user_context:
+        return redirect(url_for("user_management.login_form"))
+    # TODO: only original poster must see this
+
+    request_list_db = tuple(db_cursor.execute("SELECT user_id, post_id, comment, request_timestamp "
+                                              "FROM book_requests WHERE post_id = ? "
+                                              "ORDER BY request_timestamp ASC", [post_id]))
+
+    request_listing = []
+    for book_request in request_list_db:
+        current_request = BookRequest(book_request)
+        current_request_user = tuple(db_cursor.execute("SELECT id, email, username, display_name, permissions, "
+                                                       "email_is_public, registration_timestamp "
+                                                       "FROM users WHERE id = ?", [current_request.user_id]))
+        if current_request_user:
+            current_request.user = User(current_request_user[0])
+        else:
+            current_request.user = DeletedUser(current_request.user_id)
+        request_listing.append(current_request)
+
+    return render_template(
+        "book_request_listing.html",
+        WEBSITE_CONTEXT=website_context,
+        USER_CONTEXT=user_context,
+        REQUEST_LISTING=request_listing
+    )

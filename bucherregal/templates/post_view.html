@@ -46,6 +46,7 @@
         <div class="mb-1">
             <a href='{{ url_for("bookshelf.request_book_form", post_id=BOOK_LISTING.post_id) }}' class="btn btn-success">request</a>
             {% if USER_PERMISSIONS >= 5 %}
+                <a href='{{ url_for("bookshelf.book_request_listing", post_id=BOOK_LISTING.post_id) }}' class="btn btn-secondary">view requests</a>
                 <a href='{{ url_for("bookshelf.post_edit_form", post_id=BOOK_LISTING.post_id) }}' class="btn btn-primary">edit</a>
                 <a href='{{ url_for("bookshelf.delete_post", post_id=BOOK_LISTING.post_id) }}' class="btn btn-danger">delete</a>
             {% endif %}
