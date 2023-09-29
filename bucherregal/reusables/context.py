@@ -77,6 +77,14 @@ db_cursor.execute("""
         )
 """)
 db_cursor.execute("""
+        CREATE TABLE IF NOT EXISTS "book_requests" (
+            "user_id"    TEXT NOT NULL,
+            "post_id"    TEXT NOT NULL,
+            "comment"    TEXT NOT NULL,
+            "request_timestamp"    INTEGER NOT NULL
+        )
+""")
+db_cursor.execute("""
         CREATE TABLE IF NOT EXISTS "app_configuration" (
             "setting"    TEXT NOT NULL,
             "value"    TEXT NOT NULL

@@ -240,6 +240,11 @@ def post_view(post_id):
     else:
         book_listing.author = BookPostDeletedUser(book_listing.user_id)
 
+    requests_db = tuple(db_cursor.execute("SELECT user_id FROM book_requests "
+                                          "WHERE post_id = ?",
+                                          [str(post_id)]))
+    book_listing.amount_of_requests = len(requests_db)
+
     return render_template(
         "post_view.html",
         WEBSITE_CONTEXT=website_context,
@@ -339,3 +344,53 @@ def search_form():
     return render_template("search_form.html",
                            WEBSITE_CONTEXT=website_context,
                            USER_CONTEXT=user_context)
+
+
+@bookshelf.route('/request_book_form/<post_id>')
+def request_book_form(post_id):
+    user_context = get_user_context()
+    if not user_context:
+        return redirect(url_for("user_management.login_form"))
+    if not user_context.permissions >= 2:
+        return "you do not have permissions to perform this action"
+
+    post_db_lookup = tuple(db_cursor.execute("SELECT id, user_id, title, timestamp, wear_rating, year, location, "
+                                             "additional_information, author, last_edit_timestamp, genre, tags, "
+                                             "cover_image_url FROM book_listings "
+                                             "WHERE id = ? ", [post_id]))
+
+    if not post_db_lookup:
+        return make_response(redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ"))
+
+    book_listing = BookPost(post_db_lookup[0])
+
+    return render_template(
+        "request_book_form.html",
+        WEBSITE_CONTEXT=website_context,
+        USER_CONTEXT=user_context,
+        BOOK_LISTING=book_listing
+    )
+
+
+@bookshelf.route('/request_book/<post_id>', methods=['POST'])
+def request_book(post_id):
+    user_context = get_user_context()
+    if not user_context:
+        return redirect(url_for("user_management.login_form"))
+
+    already_requested = tuple(db_cursor.execute("SELECT post_id FROM book_requests "
+                                                "WHERE post_id = ? AND user_id = ?",
+                                                [str(post_id), str(user_context.id)]))
+
+    if already_requested:
+        return "You have already requested this book."
+
+    comment = request.form['comment']
+
+    db_cursor.execute("INSERT INTO book_requests (user_id, post_id, comment, request_timestamp) "
+                      "VALUES (?, ?, ?, ?)", [str(user_context.id), str(post_id), comment, int(time.time())])
+    db_connection.commit()
+
+    resp = make_response(redirect(url_for("bookshelf.post_view", post_id=post_id)))
+
+    return resp

@@ -44,7 +44,7 @@
 <section class="bg-info bg-opacity-10 text-light py-2">
     <div class="container">
         <div class="mb-1">
-            <a href='{{ url_for("bookshelf.index", post_id=BOOK_LISTING.post_id) }}' class="btn btn-success">request</a>
+            <a href='{{ url_for("bookshelf.request_book_form", post_id=BOOK_LISTING.post_id) }}' class="btn btn-success">request</a>
             {% if USER_PERMISSIONS >= 5 %}
                 <a href='{{ url_for("bookshelf.post_edit_form", post_id=BOOK_LISTING.post_id) }}' class="btn btn-primary">edit</a>
                 <a href='{{ url_for("bookshelf.delete_post", post_id=BOOK_LISTING.post_id) }}' class="btn btn-danger">delete</a>
@@ -57,6 +57,7 @@
             {% if (BOOK_LISTING.timestamp) != (BOOK_LISTING.last_edit_timestamp) %}
                 <br>Last edited on: {{ BOOK_LISTING.last_edit_timestamp_str }}
             {% endif %}
+            <br>Current amount of requests: {{ BOOK_LISTING.amount_of_requests }}
         </p>
     </div>
 </section>

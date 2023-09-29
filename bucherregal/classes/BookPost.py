@@ -23,6 +23,7 @@ class BookPost:
         self.cover_image_url = post_db_lookup[12]
         self.expiration_time_utc = self.last_edit_timestamp_utc + timedelta(hours=175320)
         self.user = None
+        self.amount_of_requests = 0
 
         last_edited_timestamp_tmp = datetime.fromtimestamp(self.last_edit_timestamp)
         self.last_edit_timestamp_str = last_edited_timestamp_tmp.strftime("%Y-%m-%d %H:%M")

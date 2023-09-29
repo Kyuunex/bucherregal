@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block HTML_CONTENTS %}
+<div class="container">
+    <form action="{{ url_for('bookshelf.request_book', post_id=BOOK_LISTING.post_id) }}" method="post" enctype="multipart/form-data">
+        <p>
+            You are requesting the book <strong>{{ BOOK_LISTING.title }}</strong>.
+            Please provide some information you think would be useful to the book owner in delivering you the book,
+            e.g. your phone number or your address. Requesting the book does not guarantee you will get it
+            if multiple people are interested.
+        </p>
+        <div class="form-floating my-1">
+            <textarea rows="4" style="height:40%;" name="comment" type="text" id="comment" class="form-control" placeholder="Comment" required></textarea>
+            <label for="comment">Comment</label>
+        </div>
+        <div class="form-floating my-1">
+            <input type="submit" value="Request the book" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+{% endblock %}
