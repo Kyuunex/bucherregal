@@ -35,8 +35,6 @@ def index():
     else:
         user_permissions = 1
 
-    print(request.form)
-
     user_id = request.form.get('user_id', request.args.get('user_id', ""))
     title = request.form.get('title', request.args.get('title', ""))
     author = request.form.get('author', request.args.get('author', ""))
