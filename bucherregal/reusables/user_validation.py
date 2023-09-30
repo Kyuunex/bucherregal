@@ -77,3 +77,28 @@ def get_user_context():
             if user_context_list:
                 return CurrentUser(user_context_list[0])
     return None
+
+
+def is_original_poster(post_id):
+    current_user = get_user_context()
+    post_db_lookup = tuple(db_cursor.execute("SELECT id, user_id FROM book_listings "
+                                             "WHERE id = ? AND user_id = ?", [post_id, current_user.id]))
+
+    if not post_db_lookup:
+        return False
+    else:
+        return True
+
+
+def is_original_poster_or_admin(post_id):
+    current_user = get_user_context()
+    if current_user.permissions >= 9:
+        return True
+
+    post_db_lookup = tuple(db_cursor.execute("SELECT id, user_id FROM book_listings "
+                                             "WHERE id = ? AND user_id = ?", [post_id, current_user.id]))
+
+    if not post_db_lookup:
+        return False
+    else:
+        return True

@@ -12,6 +12,7 @@ from bucherregal.reusables.context import db_cursor
 from bucherregal.reusables.context import db_connection
 from bucherregal.reusables.context import website_context
 from bucherregal.reusables.user_validation import get_user_context
+from bucherregal.reusables.user_validation import is_original_poster_or_admin
 
 from bucherregal.classes.BookPost import *
 from bucherregal.classes.BookPostUser import *
@@ -33,10 +34,6 @@ def index():
     """
 
     user_context = get_user_context()
-    if user_context:
-        user_permissions = user_context.permissions
-    else:
-        user_permissions = 1
 
     user_id = request.form.get('user_id', request.args.get('user_id', ""))
     title = request.form.get('title', request.args.get('title', ""))
@@ -163,8 +160,6 @@ def post_maker_form():
     user_context = get_user_context()
     if not user_context:
         return redirect(url_for("user_management.login_form"))
-    if not user_context.permissions >= 2:
-        return "you do not have permissions to perform this action"
 
     return render_template("post_maker_form.html", WEBSITE_CONTEXT=website_context, USER_CONTEXT=user_context)
 
@@ -181,8 +176,6 @@ def make_post():
     user_context = get_user_context()
     if not user_context:
         return redirect(url_for("user_management.login_form"))
-    if not user_context.permissions >= 2:
-        return "you do not have permissions to perform this action"
 
     if request.method == 'POST':
         title = request.form['title']
@@ -219,10 +212,6 @@ def post_view(post_id):
     """
 
     user_context = get_user_context()
-    if user_context:
-        user_permissions = user_context.permissions
-    else:
-        user_permissions = 1
 
     post_db_lookup = tuple(db_cursor.execute("SELECT id, user_id, title, timestamp, wear_rating, year, location, "
                                              "additional_information, author, last_edit_timestamp, genre, tags, "
@@ -255,7 +244,7 @@ def post_view(post_id):
         WEBSITE_CONTEXT=website_context,
         USER_CONTEXT=user_context,
         BOOK_LISTING=book_listing,
-        USER_PERMISSIONS=user_permissions,
+        IS_ORIGINAL_POSTER=is_original_poster_or_admin(post_id),
         CURRENT_USER_REQUEST_APPROVED=current_user_request_approved
     )
 
@@ -265,10 +254,8 @@ def post_edit_form(post_id):
     user_context = get_user_context()
     if not user_context:
         return redirect(url_for("user_management.login_form"))
-    if not user_context.permissions >= 5:
+    if not is_original_poster_or_admin(post_id):
         return "you do not have permissions to perform this action"
-    user_permissions = user_context.permissions
-    # TODO: ONLY ORIGINAL POSTER CAN EDIT
 
     post_db_lookup = tuple(db_cursor.execute("SELECT id, user_id, title, timestamp, wear_rating, year, location, "
                                              "additional_information, author, last_edit_timestamp, genre, tags, "
@@ -293,9 +280,8 @@ def delete_post(post_id):
     user_context = get_user_context()
     if not user_context:
         return redirect(url_for("user_management.login_form"))
-    if not user_context.permissions >= 5:
+    if not is_original_poster_or_admin(post_id):
         return "you do not have permissions to perform this action"
-    # TODO: ONLY ORIGINAL POSTER CAN DELETE
 
     db_cursor.execute("DELETE FROM book_listings WHERE id = ?", [post_id])
 
@@ -314,9 +300,8 @@ def edit_post(post_id):
     user_context = get_user_context()
     if not user_context:
         return redirect(url_for("user_management.login_form"))
-    if not user_context.permissions >= 5:
+    if not is_original_poster_or_admin(post_id):
         return "you do not have permissions to perform this action"
-    # TODO: ONLY ORIGINAL POSTER CAN EDIT
 
     if request.method == 'POST':
         title = request.form['title']
@@ -357,8 +342,6 @@ def request_book_form(post_id):
     user_context = get_user_context()
     if not user_context:
         return redirect(url_for("user_management.login_form"))
-    if not user_context.permissions >= 2:
-        return "you do not have permissions to perform this action"
 
     post_db_lookup = tuple(db_cursor.execute("SELECT id, user_id, title, timestamp, wear_rating, year, location, "
                                              "additional_information, author, last_edit_timestamp, genre, tags, "
@@ -407,7 +390,8 @@ def book_request_listing(post_id):
     user_context = get_user_context()
     if not user_context:
         return redirect(url_for("user_management.login_form"))
-    # TODO: only original poster must see this
+    if not is_original_poster_or_admin(post_id):
+        return "you do not have permissions to perform this action"
 
     request_list_db = tuple(db_cursor.execute("SELECT user_id, post_id, comment, request_timestamp, is_approved "
                                               "FROM book_requests WHERE post_id = ? "
@@ -438,7 +422,8 @@ def update_book_request_status(post_id, user_id, action_id):
     user_context = get_user_context()
     if not user_context:
         return redirect(url_for("user_management.login_form"))
-    # TODO: only original poster must do this
+    if not is_original_poster_or_admin(post_id):
+        return "you do not have permissions to perform this action"
 
     book_request = tuple(db_cursor.execute("SELECT post_id FROM book_requests WHERE post_id = ? AND user_id = ?",
                                            [str(post_id), str(user_id)]))
