@@ -13,7 +13,7 @@
     <meta property="og:site_name" content="{{ WEBSITE_CONTEXT['title'] }}">
 
     <meta property="book:isbn" content="">
-    <meta property="book:author" content="{{ BOOK_LISTING.author.display_name }}">
+    <meta property="book:author" content="{{ BOOK_LISTING.author }}">
     <meta property="book:release_date" content="{{ BOOK_LISTING.year }}">
     <meta property="book:tag" content="{{ BOOK_LISTING.tags }}">
 {% endblock %}
@@ -27,7 +27,9 @@
     </div>
 {% endif %}
 <div class="container">
-    <div class="book_book_title"><h2>{{ BOOK_LISTING.title }}</h2></div>
+    <div class="book_title"><h2>{{ BOOK_LISTING.title }}</h2></div>
+    <div class="book_author"><h6>{{ BOOK_LISTING.author }}</h6></div>
+    <div class="book_genre"><h6>Genre: {{ BOOK_LISTING.genre }}</h6></div>
 
     {% if BOOK_LISTING.cover_image_url %}
         <img src="{{ BOOK_LISTING.cover_image_url }}" alt="{{ BOOK_LISTING.title }}" class="book_listing_cover_image"/>
@@ -36,10 +38,6 @@
 
     <p class="book_listing_location">
         Location: {{ BOOK_LISTING.location }}
-    </p>
-
-    <p class="book_listing_genre">
-        Genre: {{ BOOK_LISTING.genre }}
     </p>
 
     <p class="book_listing_contents">
@@ -57,8 +55,8 @@
             {% endif %}
         </div>
         <p>
-            Posted by <a href='{{ url_for("bookshelf.index", author_id=BOOK_LISTING.author.id) }}'>
-            {{ BOOK_LISTING.author.display_name }}</a>
+            Posted by <a href='{{ url_for("bookshelf.index", user_id=BOOK_LISTING.user.id) }}'>
+            {{ BOOK_LISTING.user.display_name }}</a>
             on {{ BOOK_LISTING.timestamp_str }}
             {% if (BOOK_LISTING.timestamp) != (BOOK_LISTING.last_edit_timestamp) %}
                 <br>Last edited on: {{ BOOK_LISTING.last_edit_timestamp_str }}

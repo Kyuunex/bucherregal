@@ -226,9 +226,9 @@ def post_view(post_id):
                           "email_is_public, registration_timestamp FROM users WHERE id = ?",
                           [book_listing.user_id]))
     if book_listing_author:
-        book_listing.author = BookPostUser(book_listing_author[0])
+        book_listing.user = BookPostUser(book_listing_author[0])
     else:
-        book_listing.author = BookPostDeletedUser(book_listing.user_id)
+        book_listing.user = BookPostDeletedUser(book_listing.user_id)
 
     requests_db = tuple(db_cursor.execute("SELECT user_id FROM book_requests "
                                           "WHERE post_id = ?",
