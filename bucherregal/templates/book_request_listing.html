@@ -3,7 +3,7 @@
 {% block HTML_CONTENTS %}
     <div class="container">
     {% for REQUEST in REQUEST_LISTING %}
-        <div class="card mb-2">
+        <div class="card mb-2 {% if REQUEST.is_approved == 1 %}text-bg-success{% endif %}">
             <h5 class="card-header">
                 {{ REQUEST.user.display_name }}
             </h5>
@@ -14,6 +14,12 @@
                 <p class="card-text">
                     {{ REQUEST.comment }}
                 </p>
+                {% if REQUEST.is_approved == 0 %}
+                    <a href="{{ url_for("bookshelf.update_book_request_status", post_id=REQUEST.post_id, user_id=REQUEST.user_id, action_id=1) }}" class="btn btn-success">approve</a>
+                {% endif %}
+                {% if REQUEST.is_approved == 1 %}
+                    <a href="{{ url_for("bookshelf.update_book_request_status", post_id=REQUEST.post_id, user_id=REQUEST.user_id, action_id=0) }}" class="btn btn-danger">undo approval</a>
+                {% endif %}
             </div>
             <div class="card-footer">
                 Member since: {{ REQUEST.user.registration_timestamp_str }}

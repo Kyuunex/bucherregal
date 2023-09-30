@@ -21,6 +21,13 @@
 {% endblock %}
 
 {% block HTML_CONTENTS %}
+{% if CURRENT_USER_REQUEST_APPROVED %}
+    <div class="container">
+        <div class='alert alert-success'>
+            Your request was approved
+        </div>
+    </div>
+{% endif %}
 <div class="container">
     <div class="book_book_title"><h2>{{ BOOK_LISTING.title }}</h2></div>
 

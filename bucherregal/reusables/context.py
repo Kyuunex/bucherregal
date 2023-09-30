@@ -81,7 +81,8 @@ db_cursor.execute("""
             "user_id"    TEXT NOT NULL,
             "post_id"    TEXT NOT NULL,
             "comment"    TEXT NOT NULL,
-            "request_timestamp"    INTEGER NOT NULL
+            "request_timestamp"    INTEGER NOT NULL,
+            "is_approved"    INTEGER NOT NULL
         )
 """)
 db_cursor.execute("""

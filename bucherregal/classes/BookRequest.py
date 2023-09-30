@@ -7,6 +7,7 @@ class BookRequest:
         self.post_id = post_db_lookup[1]
         self.comment = post_db_lookup[2]
         self.request_timestamp = post_db_lookup[3]
+        self.is_approved = post_db_lookup[4]
         self.user = None
         self.request_timestamp_utc = datetime.fromtimestamp(self.request_timestamp, timezone.utc)
 

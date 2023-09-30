@@ -246,12 +246,17 @@ def post_view(post_id):
                                           [str(post_id)]))
     book_listing.amount_of_requests = len(requests_db)
 
+    current_user_request_approved = tuple(db_cursor.execute("SELECT is_approved FROM book_requests "
+                                                            "WHERE post_id = ? AND user_id = ? AND is_approved = ?",
+                                                            [str(post_id), str(user_context.id), 1]))
+
     return render_template(
         "post_view.html",
         WEBSITE_CONTEXT=website_context,
         USER_CONTEXT=user_context,
         BOOK_LISTING=book_listing,
-        USER_PERMISSIONS=user_permissions
+        USER_PERMISSIONS=user_permissions,
+        CURRENT_USER_REQUEST_APPROVED=current_user_request_approved
     )
 
 
@@ -388,8 +393,8 @@ def request_book(post_id):
 
     comment = request.form['comment']
 
-    db_cursor.execute("INSERT INTO book_requests (user_id, post_id, comment, request_timestamp) "
-                      "VALUES (?, ?, ?, ?)", [str(user_context.id), str(post_id), comment, int(time.time())])
+    db_cursor.execute("INSERT INTO book_requests (user_id, post_id, comment, request_timestamp, is_approved) "
+                      "VALUES (?, ?, ?, ?, ?)", [str(user_context.id), str(post_id), comment, int(time.time()), 0])
     db_connection.commit()
 
     resp = make_response(redirect(url_for("bookshelf.post_view", post_id=post_id)))
@@ -404,7 +409,7 @@ def book_request_listing(post_id):
         return redirect(url_for("user_management.login_form"))
     # TODO: only original poster must see this
 
-    request_list_db = tuple(db_cursor.execute("SELECT user_id, post_id, comment, request_timestamp "
+    request_list_db = tuple(db_cursor.execute("SELECT user_id, post_id, comment, request_timestamp, is_approved "
                                               "FROM book_requests WHERE post_id = ? "
                                               "ORDER BY request_timestamp ASC", [post_id]))
 
@@ -426,3 +431,25 @@ def book_request_listing(post_id):
         USER_CONTEXT=user_context,
         REQUEST_LISTING=request_listing
     )
+
+
+@bookshelf.route('/update_book_request_status/<post_id>/<user_id>/<action_id>', methods=['GET'])
+def update_book_request_status(post_id, user_id, action_id):
+    user_context = get_user_context()
+    if not user_context:
+        return redirect(url_for("user_management.login_form"))
+    # TODO: only original poster must do this
+
+    book_request = tuple(db_cursor.execute("SELECT post_id FROM book_requests WHERE post_id = ? AND user_id = ?",
+                                           [str(post_id), str(user_id)]))
+
+    if not book_request:
+        return "this should never happen"
+
+    db_cursor.execute("UPDATE book_requests SET is_approved = ? WHERE user_id = ? AND post_id = ?",
+                      [action_id, str(user_id), str(post_id)])
+    db_connection.commit()
+
+    resp = make_response(redirect(url_for("bookshelf.book_request_listing", post_id=post_id)))
+
+    return resp
