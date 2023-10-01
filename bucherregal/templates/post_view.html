@@ -32,7 +32,7 @@
     <div class="book_genre"><h6>Genre: {{ BOOK_LISTING.genre }}</h6></div>
 
     {% if BOOK_LISTING.cover_image_url %}
-        <img src="{{ BOOK_LISTING.cover_image_url }}" alt="{{ BOOK_LISTING.title }}" class="book_listing_cover_image"/>
+        <img src="{{ BOOK_LISTING.cover_image_url }}" alt="{{ BOOK_LISTING.title }}" class="book_listing_cover_image" style="max-width: 100%; max-height: 300px;" />
         <hr />
     {% endif %}
 
