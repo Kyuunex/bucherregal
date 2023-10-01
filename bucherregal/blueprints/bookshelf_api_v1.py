@@ -116,7 +116,7 @@ def index():
     for book_listing in book_listings:
         dicts.append(make_book_listing(book_listing))
 
-    response = make_response(json.dumps(dicts), 200)
+    response = make_response(json.dumps(dicts, indent=4), 200)
     response.headers.set("Content-Type", "application/json")
     return response
 
@@ -134,7 +134,7 @@ def make_post():
     if not user_context:
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
 
     if request.method == 'POST':
         title = request.form['title']
@@ -156,7 +156,7 @@ def make_post():
                            additional_information, author, posix_timestamp, genre, tags, cover_image_url])
         db_connection.commit()
 
-        response = make_response(json.dumps({"status": "success", "post_id": post_id}), 200)
+        response = make_response(json.dumps({"status": "success", "post_id": post_id}, indent=4), 200)
         response.headers.set("Content-Type", "application/json")
         return response
 
@@ -179,7 +179,7 @@ def post_view(post_id):
     if not post_db_lookup:
         return json.dumps({
             "error": "404 Post not found"
-        }), 404
+        }, indent=4), 404
 
     book_listing = BookPost(post_db_lookup[0])
     book_listing_author = tuple(
@@ -206,7 +206,7 @@ def post_view(post_id):
     else:
         dict_resp["current_user_request_approved"] = False
 
-    response = make_response(json.dumps(dict_resp), 200)
+    response = make_response(json.dumps(dict_resp, indent=4), 200)
     response.headers.set("Content-Type", "application/json")
     return response
 
@@ -217,15 +217,15 @@ def delete_post(post_id):
     if not user_context:
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
     if not is_api_user_original_poster_or_admin(post_id):
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
 
     db_cursor.execute("DELETE FROM book_listings WHERE id = ?", [post_id])
 
-    response = make_response(json.dumps({"status": "success"}), 200)
+    response = make_response(json.dumps({"status": "success"}, indent=4), 200)
     response.headers.set("Content-Type", "application/json")
     return response
 
@@ -243,11 +243,11 @@ def edit_post(post_id):
     if not user_context:
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
     if not is_api_user_original_poster_or_admin(post_id):
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
 
     if request.method == 'POST':
         title = request.form['title']
@@ -269,7 +269,7 @@ def edit_post(post_id):
                            author, posix_timestamp, genre, tags, cover_image_url, post_id])
         db_connection.commit()
 
-        response = make_response(json.dumps({"status": "success", "post_id": post_id}), 200)
+        response = make_response(json.dumps({"status": "success", "post_id": post_id}, indent=4), 200)
         response.headers.set("Content-Type", "application/json")
         return response
 
@@ -280,7 +280,7 @@ def request_book(post_id):
     if not user_context:
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
 
     already_requested = tuple(db_cursor.execute("SELECT post_id FROM book_requests "
                                                 "WHERE post_id = ? AND user_id = ?",
@@ -289,7 +289,7 @@ def request_book(post_id):
     if already_requested:
         return json.dumps({
             "error": "you already requested this book"
-        }), 400
+        }, indent=4), 400
 
     comment = request.form['comment']
 
@@ -297,7 +297,7 @@ def request_book(post_id):
                       "VALUES (?, ?, ?, ?, ?)", [str(user_context.id), str(post_id), comment, int(time.time()), 0])
     db_connection.commit()
 
-    response = make_response(json.dumps({"status": "success"}), 200)
+    response = make_response(json.dumps({"status": "success"}, indent=4), 200)
     response.headers.set("Content-Type", "application/json")
     return response
 
@@ -308,11 +308,11 @@ def book_request_listing(post_id):
     if not user_context:
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
     if not is_api_user_original_poster_or_admin(post_id):
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
 
     request_list_db = tuple(db_cursor.execute("SELECT user_id, post_id, comment, request_timestamp, is_approved "
                                               "FROM book_requests WHERE post_id = ? "
@@ -334,7 +334,7 @@ def book_request_listing(post_id):
     for one_request in request_listing:
         dicts.append(make_book_request_listing(one_request))
 
-    response = make_response(json.dumps(dicts), 200)
+    response = make_response(json.dumps(dicts, indent=4), 200)
     response.headers.set("Content-Type", "application/json")
     return response
 
@@ -345,11 +345,11 @@ def update_book_request_status(post_id, user_id, action_id):
     if not user_context:
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
     if not is_api_user_original_poster_or_admin(post_id):
         return json.dumps({
             "error": "401 Unauthorized"
-        }), 401
+        }, indent=4), 401
 
     book_request = tuple(db_cursor.execute("SELECT post_id FROM book_requests WHERE post_id = ? AND user_id = ?",
                                            [str(post_id), str(user_id)]))
@@ -357,13 +357,13 @@ def update_book_request_status(post_id, user_id, action_id):
     if not book_request:
         return json.dumps({
             "error": "404 Not Found"
-        }), 404
+        }, indent=4), 404
 
     db_cursor.execute("UPDATE book_requests SET is_approved = ? WHERE user_id = ? AND post_id = ?",
                       [action_id, str(user_id), str(post_id)])
     db_connection.commit()
 
-    response = make_response(json.dumps({"status": "success"}), 200)
+    response = make_response(json.dumps({"status": "success"}, indent=4), 200)
     response.headers.set("Content-Type", "application/json")
     return response
 
@@ -411,4 +411,4 @@ def generate_api_key():
 def make_tea():
     return json.dumps({
         "error": "503 Service Unavailable"
-    }), 503
+    }, indent=4), 503
