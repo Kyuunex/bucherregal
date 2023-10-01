@@ -11,11 +11,13 @@ from bucherregal.reusables.user_validation import get_user_context
 
 from bucherregal.blueprints.administration import administration
 from bucherregal.blueprints.bookshelf import bookshelf
+from bucherregal.blueprints.bookshelf_api_v1 import bookshelf_api_v1
 from bucherregal.blueprints.user_management import user_management
 
 app = Flask(__name__)
 app.register_blueprint(administration)
 app.register_blueprint(bookshelf)
+app.register_blueprint(bookshelf_api_v1)
 app.register_blueprint(user_management)
 
 

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block HTML_CONTENTS %}
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="col-10 col-sm-10 col-md-8 col-lg-6 col-xl-4 col-xxl-4">
+            <div class="alert alert-info">
+                Bellow is your API key.
+            </div>
+            <div class="form-floating my-1">
+                <input onClick="this.select();" name="api_key" type="text" id="api_key" class="form-control-plaintext" placeholder="API Key" value="{{ API_KEY }}" readonly />
+                <label for="api_key">API Key</label>
+            </div>
+            <div class="form-floating my-1">
+                <a href="{{ url_for("bookshelf_api_v1.generate_api_key") }}" class="btn btn-danger">Reset</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -40,6 +40,9 @@
                                 <a href="{{ url_for("user_management.my_profile") }}" class="nav-link">profile</a>
                             </li>
                             <li class="nav-item">
+                                <a href="{{ url_for("bookshelf_api_v1.request_access_form") }}" class="nav-link">api key</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ url_for("user_management.account_settings") }}" class="nav-link">account</a>
                             </li>
                             {% if USER_CONTEXT.permissions >= 9 %}

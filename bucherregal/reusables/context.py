@@ -86,6 +86,15 @@ db_cursor.execute("""
         )
 """)
 db_cursor.execute("""
+        CREATE TABLE IF NOT EXISTS "api_keys" (
+            "user_id"    TEXT PRIMARY KEY NOT NULL,
+            "api_key"    TEXT NOT NULL,
+            "timestamp"    INTEGER NOT NULL,
+            "ip_address"    INTEGER NOT NULL,
+            "ipv6"    INTEGER NOT NULL
+        )
+""")
+db_cursor.execute("""
         CREATE TABLE IF NOT EXISTS "app_configuration" (
             "setting"    TEXT PRIMARY KEY NOT NULL,
             "value"    TEXT NOT NULL
