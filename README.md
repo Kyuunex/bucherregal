@@ -4,10 +4,19 @@ Non-registered users can view the list of available books. The project includes 
 and supporting resources like book authors, genres, condition, and more.
 
 # Features
-- opengraph for embedding
-- rss feed
-- 2fa
-- list to be expanded
+- OpenGraph for embedding
+- RSS feed
+- 2FA account security
+- API functionality
+- Requests system, reject/approve
+- CRUD operations on books
+- Search functionality
+
+### Planned Features:
+- Sending messages to another user
+- Attachments with image processing for saving storage space
+- Profile editing
+- Spam filtering
 
 # Quick Installation for testing, debugging and evaluation
 Note: on Windows, use Git Bash, on Linux, use your usual terminal.
@@ -21,5 +30,4 @@ pip install -r requirements.txt
 ```
 
 ### [Installation Instructions for Production (Non-Docker)](https://github.com/Kyuunex/bucherregal/blob/master/installation.md)
-### [Installation Instructions for Production (Docker)](https://github.com/Kyuunex/bucherregal/blob/master/installation.md)
 ### [Endpoint Documentation](https://github.com/Kyuunex/bucherregal/blob/master/documentation.md)
