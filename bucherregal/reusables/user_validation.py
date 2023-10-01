@@ -92,6 +92,9 @@ def is_original_poster(post_id):
 
 def is_original_poster_or_admin(post_id):
     current_user = get_user_context()
+    if not current_user:
+        return False
+
     if current_user.permissions >= 9:
         return True
 

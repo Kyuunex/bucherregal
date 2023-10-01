@@ -235,9 +235,12 @@ def post_view(post_id):
                                           [str(post_id)]))
     book_listing.amount_of_requests = len(requests_db)
 
-    current_user_request_approved = tuple(db_cursor.execute("SELECT is_approved FROM book_requests "
-                                                            "WHERE post_id = ? AND user_id = ? AND is_approved = ?",
-                                                            [str(post_id), str(user_context.id), 1]))
+    if user_context:
+        current_user_request_approved = tuple(db_cursor.execute("SELECT is_approved FROM book_requests "
+                                                                "WHERE post_id = ? AND user_id = ? AND is_approved = ?",
+                                                                [str(post_id), str(user_context.id), 1]))
+    else:
+        current_user_request_approved = None
 
     return render_template(
         "post_view.html",
