@@ -9,7 +9,7 @@ To create an account, visit `/registration_form` in your browser.
 Documentation is incomplete for now.
 
 ### Get a list of book listings.
-#### `GET/POST` `/api/v1/book_listing`
+#### `GET`/`POST` `/api/v1/book_listing`
 - returns: json with a list of all book listings
 
 ```bash
@@ -70,8 +70,23 @@ curl http://127.0.0.1:8089/api/v1/book_listing
 
 ---
 
+### Search for books
+#### `GET`/`POST` `/api/v1/book_listing`
+Fields
+- `user_id`: 
+- `title`: 
+- `author`: 
+- `genre`: 
+- `wear_rating`:
+- `year`: 
+- `tags`: 
+- `location`: 
+
+---
+
 ### Make post
 #### `POST` `/api/v1/make_post`
+Fields
 - `title`: 
 - `author`: 
 - `genre`: 
@@ -96,6 +111,7 @@ curl http://127.0.0.1:8089/api/v1/book_listing
 
 ### Edit post
 #### `POST` `/api/v1/edit_post/<post_id>`
+Fields
 - `title`: 
 - `author`: 
 - `genre`: 
@@ -110,6 +126,8 @@ curl http://127.0.0.1:8089/api/v1/book_listing
 
 ### Request a book
 #### `POST` `/api/v1/request_book/<post_id>`
+Fields
+- `comment`: 
 
 ---
 
