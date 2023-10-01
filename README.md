@@ -17,6 +17,8 @@ and supporting resources like book authors, genres, condition, and more.
 - Attachments with image processing for saving storage space
 - Profile editing
 - Spam filtering
+- Docker
+- Better documentation
 
 # Quick Installation for testing, debugging and evaluation
 Note: on Windows, use Git Bash, on Linux, use your usual terminal.
